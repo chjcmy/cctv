@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width: 1000px; margin: auto;"></div>
+<br><br><br><br>
+<div id="chartContainer2" style="height: 370px; width: 1000px; margin: auto;"></div>
+<br><br><br><br>
+<div id="chartContainer3" style="height: 370px; width: 1000px; margin: auto;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+</body>
+<script>
+window.onload = function () {
+    //(1) 한 달 추이
+    var date_index = "{{ date_index }}";
+    var arr_date = date_index.split(",");
+    var count_visit = "{{ count_visit }}";
+    var arr_count = count_visit.split(",");
+    var dataPoints = [];
+    for (var i = 0; i < 30; i++) {
+        var str = arr_date[i].slice(7,17);
+        var strArr = str.split("-");
+        var date = new Date(strArr[0], strArr[1]-1, strArr[2]);
+        dataPoints.push({
+            x: date,
+            y: parseInt(arr_count[i].slice(1,2))
+        });
+    };
+    var chart = new CanvasJS.Chart("chartContainer", {
+        theme: "light2",
+        animationEnabled: true,
+        title: {
+            text: "최근 한 달 동안의 방문 횟수"
+        },
+        axisX: {
+            title: "Date",
+            valueFormatString: "MMM DD"
+        },
+        axisY: {
+            title: "Count",
+            suffix: "번",
+            includeZero: true
+        },
+        data: [{
+            type: "line",
+            name: "CPU Utilization",
+            color:"rgba(0,150,147,.6)",
+            connectNullData: true,
+            //nullDataLineDashType: "solid",
+            xValueType: "dateTime",
+            dataPoints: dataPoints
+        }]
+    });
+    chart.render();
+
+    //(2) 방문 시각
+    CanvasJS.addColorSet("customset",
+        [
+            "#005a8d",
+            "#f9dfdc",
+            "#aad8d3",
+            "#00adb5",
+        ]);
+    var hours_percentage = "{{ hours_percentage }}";
+    var hours_percentage = hours_percentage.replace(/\s/g,'').replace('[','').replace(']','').split(",");
+    console.log(hours_percentage);
+    var labels = ['새벽(0시~6시)', '오전(6시~12시)', '오후(12시~18시)', '저녁(18시~0시)'];
+    var dataPoints2 = [];
+    for (var i = 0; i < 4; i++) {
+        dataPoints2.push({ y:parseFloat(hours_percentage[i]), label: labels[i] })
+    }
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        colorSet: "customset",
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        exportEnabled: true,
+        animationEnabled: true,
+        title: {
+            text: "방문 시간 통계"
+        },
+        data: [{
+            type: "pie",
+            startAngle: -90,
+            toolTipContent: "<b>{label}</b>: {y}%",
+            showInLegend: "true",
+            legendText: "{label}",
+            indexLabelFontSize: 16,
+            indexLabel: "{label} - {y}%",
+            dataPoints: dataPoints2
+        }]
+    });
+    chart2.render();
+
+    //(3) 위험도 그래프
+    var danger_data = "{{ danger_data }}";
+    var danger_data = danger_data.replace(/\s/g, '').replace('[', '').replace(']', '').split(",");
+    var dataPoints3 = [];
+    var labels3 = ['안전', '수상', '위험'];
+    for (var i = 0; i < 3; i++) {
+        dataPoints3.push({
+            y: parseInt(danger_data[i]),
+            label: labels3[i] + '  -  ' + danger_data[i] + '명'
+        })
+    }
+    CanvasJS.addColorSet("customset3",
+        [
+            "#9fd8df",
+            "#f0e4d7",
+            "#f5c0c0",
+        ]);
+    var chart3 = new CanvasJS.Chart("chartContainer3", {
+        theme: "light2",
+        colorSet: "customset3",
+        title: {
+            text: "위험 분류 별 방문자 수"
+        },
+        animationEnabled: true,
+        data: [{
+            startAngle: -90,
+            type: "doughnut",
+            dataPoints: dataPoints3,
+            toolTipContent: "{y}명",
+            indexLabelFontSize: 16,
+        }]
+    });
+    chart3.render();
+}
+</script>
+</html>

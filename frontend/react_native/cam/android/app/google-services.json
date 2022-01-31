@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "596926950146",
+    "project_id": "react-86192",
+    "storage_bucket": "react-86192.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596926950146:android:e2bed23f6e90b3435ef01b",
+        "android_client_info": {
+          "package_name": "com.cam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596926950146-p43o8fhgpqu7g3n78c871iq8kdvua417.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUjlWTcqkoBqdbMIEetSI4uHIhsyUyoF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596926950146-p43o8fhgpqu7g3n78c871iq8kdvua417.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
